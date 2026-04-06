@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day Trading Masterclass</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c0f;
+    --surface: #0f1318;
+    --surface2: #151b22;
+    --border: #1e2730;
+    --green: #00d084;
+    --green-dim: rgba(0,208,132,0.12);
+    --green-glow: rgba(0,208,132,0.25);
+    --red: #ff4d6d;
+    --gold: #f5c842;
+    --gold-dim: rgba(245,200,66,0.1);
+    --blue: #4db8ff;
+    --text: #e8edf2;
+    --muted: #5a6a7a;
+    --accent: #00d084;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,208,132,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,208,132,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 80px 0 60px;
+    text-align: center;
+    position: relative;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--green);
+    border: 1px solid var(--green);
+    padding: 5px 14px;
+    margin-bottom: 28px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 10vw, 96px);
+    line-height: 0.9;
+    letter-spacing: 0.03em;
+    color: var(--text);
+    animation: fadeDown 0.6s 0.1s ease both;
+  }
+
+  .hero h1 span {
+    color: var(--green);
+    display: block;
+  }
+
+  .hero-sub {
+    margin-top: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    animation: fadeDown 0.6s 0.2s ease both;
+  }
+
+  .hero-line {
+    width: 60px;
+    height: 2px;
+    background: var(--green);
+    margin: 40px auto 0;
+    animation: fadeDown 0.6s 0.3s ease both;
+  }
+
+  /* NAV */
+  .nav-pills {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 32px 0 48px;
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+
+  .nav-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    cursor: pointer;
+    background: none;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+
+  .nav-pill:hover, .nav-pill.active {
+    border-color: var(--green);
+    color: var(--green);
+    background: var(--green-dim);
+  }
+
+  /* SECTIONS */
+  .section {
+    display: none;
+    animation: fadeUp 0.4s ease both;
+  }
+  .section.active { display: block; }
+
+  /* MODULE CARD */
+  .module {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .module:hover { border-color: #2a3540; }
+
+  .module-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .module-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--green);
+    line-height: 1;
+    min-width: 36px;
+    opacity: 0.5;
+  }
+
+  .module-title {
+    flex: 1;
+  }
+
+  .module-title h3 {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    text-transform: uppercase;
+  }
+
+  .module-title p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .module-arrow {
+    color: var(--muted);
+    transition: transform 0.3s;
+    font-size: 18px;
+  }
+
+  .module.open .module-arrow { transform: rotate(90deg); color: var(--green); }
+
+  .module-body {
+    display: none;
+    padding: 0 24px 24px 76px;
+    border-top: 1px solid var(--border);
+  }
+
+  .module.open .module-body { display: block; }
+
+  /* LESSON ITEMS */
+  .lesson {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(30,39,48,0.5);
+  }
+  .lesson:last-child { border-bottom: none; }
+
+  .lesson-icon {
+    width: 28px;
+    height: 28px;
+    background: var(--green-dim);
+    border: 1px solid rgba(0,208,132,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .lesson-content h4 {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .lesson-content p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .lesson-content p strong {
+    color: var(--green);
+    font-weight: 500;
+  }
+
+  /* CHECKLIST STYLE */
+  .checklist {
+    list-style: none;
+    margin-top: 10px;
+  }
+
+  .checklist li {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    padding: 6px 0 6px 20px;
+    position: relative;
+    border-bottom: 1px solid rgba(30,39,48,0.5);
+  }
+  .checklist li:last-child { border: none; }
+
+  .checklist li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+  }
+
+  .checklist li span {
+    color: var(--text);
+  }
+
+  /* ENTRY MODEL SECTION */
+  .entry-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  @media (max-width: 640px) {
+    .entry-grid { grid-template-columns: 1fr; }
+  }
+
+  .entry-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .entry-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .entry-card.continuation::before { background: var(--green); }
+  .entry-card.reversal::before { background: var(--red); }
+  .entry-card.patty::before { background: var(--gold); }
+
+  .entry-card-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.05em;
+    margin-bottom: 14px;
+  }
+
+  .entry-card.continuation .entry-card-label { color: var(--green); }
+  .entry-card.reversal .entry-card-label { color: var(--red); }
+  .entry-card.patty .entry-card-label { color: var(--gold); }
+
+  .entry-steps {
+    list-style: none;
+    counter-reset: steps;
+  }
+
+  .entry-steps li {
+    counter-increment: steps;
+    font-size: 11px;
+    color: var(--muted);
+    padding: 7px 0 7px 28px;
+    position: relative;
+    border-bottom: 1px solid rgba(30,39,48,0.5);
+    line-height: 1.5;
+    font-family: 'DM Mono', monospace;
+  }
+  .entry-steps li:last-child { border: none; }
+
+  .entry-steps li::before {
+    content: counter(steps);
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 18px;
+    height: 18px;
+    background: var(--border);
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .entry-card.continuation .entry-steps li::before { color: var(--green); border-left: 2px solid var(--green); }
+  .entry-card.reversal .entry-steps li::before { color: var(--red); border-left: 2px solid var(--red); }
+  .entry-card.patty .entry-steps li::before { color: var(--gold); border-left: 2px solid var(--gold); }
+
+  /* RULES */
+  .rules-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  @media (max-width: 480px) {
+    .rules-grid { grid-template-columns: 1fr; }
+  }
+
+  .rule-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    transition: border-color 0.2s;
+  }
+
+  .rule-card:hover { border-color: #2a3540; }
+
+  .rule-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .rule-card h4 {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 5px;
+  }
+
+  .rule-card p {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.6;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* BIAS SECTION */
+  .bias-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--green);
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+
+  .bias-block h4 {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--green);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .bias-block p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .bias-block p strong { color: var(--text); }
+
+  /* TICKER TAPE */
+  .ticker {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    padding: 10px 0;
+    margin: 48px 0 0;
+    position: relative;
+  }
+
+  .ticker::before, .ticker::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 80px;
+    z-index: 2;
+  }
+  .ticker::before { left: 0; background: linear-gradient(90deg, var(--bg), transparent); }
+  .ticker::after { right: 0; background: linear-gradient(-90deg, var(--bg), transparent); }
+
+  .ticker-track {
+    display: flex;
+    gap: 40px;
+    animation: ticker 20s linear infinite;
+    white-space: nowrap;
+  }
+
+  .ticker-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .ticker-item .dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; }
+  .ticker-item .neg { color: var(--red); }
+  .ticker-item .pos { color: var(--green); }
+
+  /* SECTION HEADER */
+  .section-header {
+    margin-bottom: 28px;
+  }
+
+  .section-header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 0.05em;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .section-header p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px;
+    margin-bottom: 16px;
+  }
+
+  .quiz-q {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .quiz-opt {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 10px 16px;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .quiz-opt:hover { border-color: var(--green); color: var(--text); }
+  .quiz-opt.correct { border-color: var(--green); background: var(--green-dim); color: var(--green); }
+  .quiz-opt.wrong { border-color: var(--red); background: rgba(255,77,109,0.1); color: var(--red); }
+
+  .quiz-opt-letter {
+    width: 20px;
+    height: 20px;
+    border: 1px solid currentColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    flex-shrink: 0;
+  }
+
+  .quiz-feedback {
+    margin-top: 12px;
+    padding: 10px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    display: none;
+  }
+
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: var(--green-dim); color: var(--green); border-left: 2px solid var(--green); }
+  .quiz-feedback.wrong { background: rgba(255,77,109,0.1); color: var(--red); border-left: 2px solid var(--red); }
+
+  /* PROGRESS */
+  .progress-bar {
+    height: 2px;
+    background: var(--border);
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--green);
+    transition: width 0.4s ease;
+    box-shadow: 0 0 8px var(--green-glow);
+  }
+
+  .progress-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    letter-spacing: 0.1em;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    text-align: center;
+    margin-top: 64px;
+  }
+
+  footer p {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* WARNING BOX */
+  .warning {
+    background: rgba(245,200,66,0.07);
+    border: 1px solid rgba(245,200,66,0.25);
+    border-left: 3px solid var(--gold);
+    padding: 14px 18px;
+    margin-top: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .warning-icon { color: var(--gold); font-size: 16px; flex-shrink: 0; }
+  .warning p { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); line-height: 1.7; }
+  .warning p strong { color: var(--gold); }
+
+  /* ANIMATIONS */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">ICT · SMART MONEY · STRUCTURED SETUPS</div>
+    <div style="animation: fadeDown 0.5s 0.1s ease both; margin: 40px 0; display:flex; align-items:center; justify-content:center; line-height:1;">
+      <span style="font-family:'Bebas Neue',sans-serif; font-size: clamp(52px, 10vw, 96px); letter-spacing: 0.03em; line-height: 1; color: var(--text);">JK TRADES</span>
+    </div>
+    <h1 style="animation-delay:0.2s;">Day Trading<span>Masterclass</span></h1>
+    <p class="hero-sub" style="animation-delay:0.3s;">PRECISION ENTRY · DISCIPLINED EXITS · REPEATABLE EDGE</p>
+    <div class="hero-line" style="animation-delay:0.4s;"></div>
+  </div>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-track">
+      <div class="ticker-item"><span class="dot"></span>XAUUSD <span class="pos">+0.82%</span></div>
+      <div class="ticker-item"><span class="dot"></span>ES1! <span class="neg">-0.34%</span></div>
+      <div class="ticker-item"><span class="dot"></span>NQ1! <span class="neg">-0.61%</span></div>
+      <div class="ticker-item"><span class="dot"></span>GBP/USD <span class="pos">+0.19%</span></div>
+      <div class="ticker-item"><span class="dot"></span>BTC/USD <span class="pos">+1.42%</span></div>
+      <div class="ticker-item"><span class="dot"></span>DXY <span class="neg">-0.22%</span></div>
+      <div class="ticker-item"><span class="dot"></span>EUR/USD <span class="pos">+0.31%</span></div>
+      <div class="ticker-item"><span class="dot"></span>XAUUSD <span class="pos">+0.82%</span></div>
+      <div class="ticker-item"><span class="dot"></span>ES1! <span class="neg">-0.34%</span></div>
+      <div class="ticker-item"><span class="dot"></span>NQ1! <span class="neg">-0.61%</span></div>
+      <div class="ticker-item"><span class="dot"></span>GBP/USD <span class="pos">+0.19%</span></div>
+      <div class="ticker-item"><span class="dot"></span>BTC/USD <span class="pos">+1.42%</span></div>
+      <div class="ticker-item"><span class="dot"></span>DXY <span class="neg">-0.22%</span></div>
+      <div class="ticker-item"><span class="dot"></span>EUR/USD <span class="pos">+0.31%</span></div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav-pills">
+    <button class="nav-pill active" onclick="showSection('glossary')">01 Intro to ICT</button>
+    <button class="nav-pill" onclick="showSection('premarket')">02 Pre-Market</button>
+    <button class="nav-pill" onclick="showSection('entries')">03 Entry Models</button>
+    <button class="nav-pill" onclick="showSection('rules')">04 Trading Rules</button>
+  </div>
+
+  <!-- ═══════════════════════════════════ -->
+  <!-- SECTION 1: PRE-MARKET -->
+  <!-- ═══════════════════════════════════ -->
+  <div class="section" id="section-premarket">
+    <div class="section-header">
+      <h2>Pre-Market Analysis</h2>
+      <p>// Complete this checklist before every session. No bias = no trade.</p>
+    </div>
+
+    <div class="module open" id="mod1">
+      <div class="module-header" onclick="toggleModule('mod1')">
+        <div class="module-num">01</div>
+        <div class="module-title">
+          <h3>Finding Your Bias</h3>
+          <p>// The foundation of every trade decision</p>
+        </div>
+        <div class="module-arrow">›</div>
+      </div>
+      <div class="module-body">
+        <div class="lesson">
+          <div class="lesson-icon">📐</div>
+          <div class="lesson-content">
+            <h4>What is Bias?</h4>
+            <p>Bias is your <strong>directional opinion</strong> on where price wants to go — bullish or bearish — determined before the market opens. Every decision you make during the session flows from this analysis. Trading without a bias is gambling.</p>
+          </div>
+        </div>
+        <div class="lesson">
+          <div class="lesson-icon">📊</div>
+          <div class="lesson-content">
+            <h4>How to Determine Bias</h4>
+            <p>Start on the <strong>Daily / 4H</strong> chart. Identify the current market structure — is price making higher highs/lows (bullish) or lower highs/lows (bearish)? Then drop to the <strong>1H</strong> to see the intraday structure. Your bias should align with the HTF narrative.</p>
+          </div>
+        </div>
+        <div class="bias-block">
+          <h4>Bias Rule</h4>
+          <p><strong>Never trade against your bias.</strong> If your bias is bullish but price is selling into a resistance, you do not short. Wait for your bias to present a valid setup, or stay flat.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="module" id="mod2">
+      <div class="module-header" onclick="toggleModule('mod2')">
+        <div class="module-num">02</div>
+        <div class="module-title">
+          <h3>Gap Analysis (1H – 4H)</h3>
+          <p>// Is price respecting or disrespecting key gaps?</p>
+        </div>
+        <div class="module-arrow">›</div>
+      </div>
+      <div class="module-body">
+        <div class="lesson">
+          <div class="lesson-icon">⬜</div>
+          <div class="lesson-content">
+            <h4>What Gaps to Mark</h4>
+            <p>On the <strong>1H and 4H</strong> timeframes, mark all visible Fair Value Gaps (FVGs) that have <strong>not been filled</strong>. These are inefficiencies — three-candle formations where the first candle's wick and the third candle's wick do not overlap.</p>
+          </div>
+        </div>
+        <div class="lesson">
+          <div class="lesson-icon">✅</div>
+          <div class="lesson-content">
+            <h4>Respecting vs. Disrespecting</h4>
+            <p>A gap is <strong>respected</strong> when price returns to it and reacts (bounces or continues). A gap is <strong>disrespected</strong> when price blows straight through it. Disrespected gaps signal momentum. Respected gaps signal potential reversal or entry zones.</p>
+          </div>
+        </div>
+        <div class="lesson">
+          <div class="lesson-icon">🎯</div>
+          <div class="lesson-content">
+            <h4>Using Gaps in Context</h4>
+            <p>Ask: <strong>Does the gap align with my bias?</strong> A bullish FVG below price in a bullish bias market = high-probability reaction zone. A bearish FVG above price in a bullish market = potential target or resistance to watch.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="module" id="mod3">
+      <div class="module-header" onclick="toggleModule('mod3')">
+        <div class="module-num">03</div>
+        <div class="module-title">
+          <h3>Liquidity Analysis</h3>
+          <p>// Where has liquidity been taken? Where is it building?</p>
+        </div>
+        <div class="module-arrow">›</div>
+      </div>
+      <div class="module-body">
+        <div class="lesson">
+          <div class="lesson-icon">💧</div>
+          <div class="lesson-content">
+            <h4>What is Liquidity?</h4>
+            <p>Liquidity pools are clusters of <strong>resting stop orders</strong>. Equal highs attract buy stops above. Equal lows attract sell stops below. Smart money needs this liquidity to fill large positions — so price gravitates toward these zones before making its real move.</p>
+          </div>
+        </div>
+        <div class="lesson">
+          <div class="lesson-icon">🧹</div>
+          <div class="lesson-content">
+            <h4>What Liquidity Has Been Taken?</h4>
+            <p>Look for <strong>recent wicks or sweeps</strong> of swing highs/lows. If a key high was swept and price reversed, that liquidity is gone — the market has already hunted those stops. This can confirm bias and identify where the next target lies.</p>
+          </div>
+        </div>
+        <div class="lesson">
+          <div class="lesson-icon">🎯</div>
+          <div class="lesson-content">
+            <h4>What Liquidity is Left to Target?</h4>
+            <p>Mark untouched equal highs, equal lows, previous session highs/lows, and obvious swing points. These are your <strong>draw on liquidity</strong> — where price is likely heading. Your TP should always be at obvious liquidity unless price reaches a strong POI first.</p>
+          </div>
+        </div>
+        <div class="lesson">
+          <div class="lesson-icon">🔴</div>
+          <div class="lesson-content">
+            <h4>High vs. Low Resistance Liquidity</h4>
+            <p><strong>High resistance liquidity (HRL):</strong> Liquidity sitting above/below strong structure — price may struggle to reach it. <strong>Low resistance liquidity (LRL):</strong> Open path with no major impediments — price can reach it quickly. Prefer trading toward LRL targets for higher probability hits.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="warning">
+      <div class="warning-icon">⚠</div>
+      <p><strong>Pre-Market Rule:</strong> If you cannot clearly define your bias, your gap levels, and your liquidity targets — <strong>do not trade that day.</strong> Waiting for clarity is itself a professional decision.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════ -->
+  <!-- SECTION 2: ENTRY MODELS -->
+  <!-- ═══════════════════════════════════ -->
+  <div class="section" id="section-entries">
+    <div class="section-header">
+      <h2>Entry Models</h2>
+      <p>// Three setups. One per day. Execute with precision.</p>
+    </div>
+
+    <div class="entry-grid">
+      <!-- CONTINUATION -->
+      <div class="entry-card continuation">
+        <div class="entry-card-label">Continuation</div>
+        <ol class="entry-steps">
+          <li>5m or 15m FVG filled</li>
+          <li>1m–3m IFVG confirmed</li>
+          <li>SL at highest/lowest point in FVG</li>
+          <li>TP at obvious POI</li>
+        </ol>
+      </div>
+
+      <!-- REVERSAL -->
+      <div class="entry-card reversal">
+        <div class="entry-card-label">Reversal</div>
+        <ol class="entry-steps">
+          <li>Liquidity sweep OR HTF FVG filled</li>
+          <li>2m–5m IFVG confirmed</li>
+          <li>SL at protected high/low</li>
+          <li>TP at obvious POI</li>
+        </ol>
+      </div>
+
+      <!-- PATTY SWING -->
+      <div class="entry-card patty">
+        <div class="entry-card-label">Patty Swing</div>
+        <ol class="entry-steps">
+          <li>Wait for NY open manipulation</li>
+          <li>Highest TF IFVG toward bias</li>
+          <li>TP at obvious POI</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- DEEP DIVE -->
+    <div style="margin-top: 28px;">
+      <div class="module" id="mod-cont">
+        <div class="module-header" onclick="toggleModule('mod-cont')">
+          <div class="module-num">A</div>
+          <div class="module-title">
+            <h3>Continuation — Deep Dive</h3>
+            <p>// Trading with the established trend</p>
+          </div>
+          <div class="module-arrow">›</div>
+        </div>
+        <div class="module-body">
+          <div class="lesson">
+            <div class="lesson-icon">📈</div>
+            <div class="lesson-content">
+              <h4>Step 1 — 5m or 15m FVG Filled</h4>
+              <p>Price must return to and enter a <strong>5-minute or 15-minute Fair Value Gap</strong> that aligns with your bias. This FVG acts as your reaction zone — the area where institutional orders are waiting. The gap fill is your first confirmation that price is in the right area.</p>
+            </div>
+          </div>
+          <div class="lesson">
+            <div class="lesson-icon">🔬</div>
+            <div class="lesson-content">
+              <h4>Step 2 — 1m–3m IFVG</h4>
+              <p>Drop to the <strong>1-minute or 3-minute</strong> chart inside the HTF FVG. Look for an Inverse Fair Value Gap (IFVG) — a gap that forms as price begins to react from the zone. This is your precise entry trigger. It tells you smart money is actually defending the level.</p>
+            </div>
+          </div>
+          <div class="lesson">
+            <div class="lesson-icon">🛡️</div>
+            <div class="lesson-content">
+              <h4>Step 3 — Stop Loss Placement</h4>
+              <p>Place your SL at the <strong>highest point (if bearish) or lowest point (if bullish)</strong> of the FVG. This is the invalidation — if price closes beyond this point, the gap has been violated and your thesis is wrong. Never move SL into loss.</p>
+            </div>
+          </div>
+          <div class="lesson">
+            <div class="lesson-icon">💰</div>
+            <div class="lesson-content">
+              <h4>Step 4 — Take Profit</h4>
+              <p>Target the most <strong>obvious Point of Interest (POI)</strong> ahead of price — the next liquidity pool, FVG, or structure level. Don't get greedy chasing more. Lock in the logical target and exit cleanly.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="module" id="mod-rev">
+        <div class="module-header" onclick="toggleModule('mod-rev')">
+          <div class="module-num">B</div>
+          <div class="module-title">
+            <h3>Reversal — Deep Dive</h3>
+            <p>// Catching the turn with precision</p>
+          </div>
+          <div class="module-arrow">›</div>
+        </div>
+        <div class="module-body">
+          <div class="lesson">
+            <div class="lesson-icon">🌊</div>
+            <div class="lesson-content">
+              <h4>Step 1 — Liquidity Sweep OR HTF FVG Fill</h4>
+              <p>A reversal requires <strong>either</strong> a sweep of a significant liquidity pool (stop hunt beyond a swing high/low with immediate rejection) <strong>or</strong> a fill of a higher timeframe FVG. Without one of these triggers, you are not trading a reversal — you are trading into momentum, which is low probability.</p>
+            </div>
+          </div>
+          <div class="lesson">
+            <div class="lesson-icon">🔬</div>
+            <div class="lesson-content">
+              <h4>Step 2 — 2m–5m IFVG</h4>
+              <p>After the sweep or HTF fill, drop to the <strong>2-minute or 5-minute</strong> chart and look for an IFVG forming in the direction of your bias. This gap is your entry trigger — it tells you price has shifted character and is beginning to move in the new direction.</p>
+            </div>
+          </div>
+          <div class="lesson">
+            <div class="lesson-icon">🛡️</div>
+            <div class="lesson-content">
+              <h4>Step 3 — SL at Protected High/Low</h4>
+              <p>For reversals, your SL goes at the <strong>protected high (bearish reversal) or protected low (bullish reversal)</strong> — the extreme created by the liquidity sweep. If price goes back beyond that extreme, the reversal has failed. This is your max pain point.</p>
+            </div>
+          </div>
+          <div class="lesson">
+            <div class="lesson-icon">💰</div>
+            <div class="lesson-content">
+              <h4>Step 4 — Take Profit</h4>
+              <p>Target the <strong>opposing liquidity</strong> or the next clean FVG in your bias direction. Reversal trades often have the best R:R because your SL is tight relative to the distance to the target.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="module" id="mod-patty">
+        <div class="module-header" onclick="toggleModule('mod-patty')">
+          <div class="module-num">C</div>
+          <div class="module-title">
+            <h3>Patty Swing — Deep Dive</h3>
+            <p>// Riding the NY open manipulation move</p>
+          </div>
+          <div class="module-arrow">›</div>
+        </div>
+        <div class="module-body">
+          <div class="lesson">
+            <div class="lesson-icon">🕘</div>
+            <div class="lesson-content">
+              <h4>Step 1 — Wait for NY Open Manipulation</h4>
+              <p>The <strong>New York open (9:30 AM EST)</strong> frequently creates a false move before the real session direction is established. This manipulation — often a spike against bias — is your setup. Do not enter before you see this manipulative move. Patience is mandatory here.</p>
+            </div>
+          </div>
+          <div class="lesson">
+            <div class="lesson-icon">📡</div>
+            <div class="lesson-content">
+              <h4>Step 2 — Highest TF IFVG Toward Bias</h4>
+              <p>After the manipulation, find the <strong>highest timeframe IFVG</strong> that aligns with your pre-market bias. The higher the timeframe of the IFVG (e.g., 15m > 5m > 3m), the stronger the setup. This gap is your entry. You are now positioned in the direction of smart money after the shake-out.</p>
+            </div>
+          </div>
+          <div class="lesson">
+            <div class="lesson-icon">💰</div>
+            <div class="lesson-content">
+              <h4>Step 3 — TP at Obvious POI</h4>
+              <p>Target the <strong>most obvious draw on liquidity</strong> that was identified in pre-market. Patty Swings often have large R:R because the manipulation creates a tight entry point relative to the full session's move. Hold to your target and resist the urge to close early.</p>
+            </div>
+          </div>
+          <div class="warning">
+            <div class="warning-icon">⚠</div>
+            <p><strong>Patty Swing Note:</strong> This is a <strong>swing-style intraday trade</strong>. You may hold for hours. Do not babysit it — set your levels, manage once if needed, and let it run. The biggest mistake is cutting a winning Patty Swing too early.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════ -->
+  <!-- SECTION 3: RULES -->
+  <!-- ═══════════════════════════════════ -->
+  <div class="section" id="section-rules">
+    <div class="section-header">
+      <h2>Trading Rules</h2>
+      <p>// Non-negotiable. These protect your account and your psychology.</p>
+    </div>
+
+    <div class="rules-grid">
+      <div class="rule-card">
+        <div class="rule-icon">1️⃣</div>
+        <div>
+          <h4>Max 1 Trade Per Day</h4>
+          <p>One setup. One trigger. One trade. More trades = more risk and more emotional noise. Your job is to find the one clean setup each day and execute it flawlessly.</p>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-icon">📉</div>
+        <div>
+          <h4>Risk Max 1% Per Day</h4>
+          <p>Size your position so that if SL is hit, you lose no more than 1% of total account. Consistency over a month of 1% risks far outperforms blowing up chasing 5–10% swings.</p>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-icon">⏳</div>
+        <div>
+          <h4>Wait for Your Setup</h4>
+          <p>Do not force a trade. If the setup does not appear, the trade for the day is: no trade. Sitting on hands is a position. Missing a move is free. Taking a bad trade is expensive.</p>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-icon">🚫</div>
+        <div>
+          <h4>No Revenge Trading</h4>
+          <p>If your one trade hits SL, the trading day is over. Close the platform. No second chances, no "I'll make it back." Tomorrow is a new day with a fresh setup.</p>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-icon">🧘</div>
+        <div>
+          <h4>Don't Get Greedy</h4>
+          <p>When your TP is hit, close the trade. Do not move the target further. Do not hold for "just a little more." Greed destroys accounts slowly — one moved target at a time. Take the win, log the trade, step away.</p>
+        </div>
+      </div>
+
+      <div class="rule-card" style="grid-column: 1 / -1;">
+        <div class="rule-icon">🕘</div>
+        <div>
+          <h4>Trade Window: 9:30 – 11:00 AM EST Only</h4>
+          <p>All entries must be taken between <strong>9:30 AM and 11:00 AM EST</strong>. This is the NY open kill zone — the highest liquidity, highest volatility, and highest probability window of the day. If your setup has not triggered by 11:00 AM, the trade is off. No exceptions. Do not re-open the charts looking for afternoon setups. The window is closed.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 28px;">
+      <div class="module" id="mod-psych">
+        <div class="module-header" onclick="toggleModule('mod-psych')">
+          <div class="module-num">📋</div>
+          <div class="module-title">
+            <h3>Daily Trading Checklist</h3>
+            <p>// Run through this before, during, and after every session</p>
+          </div>
+          <div class="module-arrow">›</div>
+        </div>
+        <div class="module-body">
+          <p style="font-size:12px; color: var(--muted); font-family: 'DM Mono', monospace; margin-bottom: 14px;">PRE-SESSION</p>
+          <ul class="checklist">
+            <li><span>Bias identified on Daily / 4H / 1H</span></li>
+            <li><span>1H–4H FVGs marked and labeled</span></li>
+            <li><span>Liquidity sweeps identified (taken liquidity)</span></li>
+            <li><span>Target liquidity identified (draw on liquidity)</span></li>
+            <li><span>HRL vs LRL assessed for today's targets</span></li>
+            <li><span>Economic calendar checked — no news trades</span></li>
+          </ul>
+
+          <p style="font-size:12px; color: var(--muted); font-family: 'DM Mono', monospace; margin: 18px 0 14px;">DURING SESSION</p>
+          <ul class="checklist">
+            <li><span>Entry taken between 9:30–11:00 AM EST only</span></li>
+            <li><span>Only 1 setup identified and waited for</span></li>
+            <li><span>Setup matches one of the 3 entry models exactly</span></li>
+            <li><span>SL placed correctly before entry</span></li>
+            <li><span>Risk confirmed ≤ 1% of account</span></li>
+            <li><span>TP set at obvious POI — not moved</span></li>
+          </ul>
+
+          <p style="font-size:12px; color: var(--muted); font-family: 'DM Mono', monospace; margin: 18px 0 14px;">POST-SESSION</p>
+          <ul class="checklist">
+            <li><span>Trade logged with screenshot</span></li>
+            <li><span>Outcome reviewed objectively (not emotionally)</span></li>
+            <li><span>Setup quality graded regardless of outcome</span></li>
+            <li><span>Platform closed. Day complete.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════ -->
+  <!-- SECTION 4: GLOSSARY -->
+  <!-- ═══════════════════════════════════ -->
+  <div class="section active" id="section-glossary">
+    <div class="section-header">
+      <h2>Intro to ICT</h2>
+      <p>// Know the language. Know the edge.</p>
+    </div>
+
+    <div class="module open" id="mod-gloss">
+      <div class="module-header" onclick="toggleModule('mod-gloss')">
+        <div class="module-num">📖</div>
+        <div class="module-title">
+          <h3>Core Terms</h3>
+          <p>// ICT / Smart Money Concepts Definitions</p>
+        </div>
+        <div class="module-arrow">›</div>
+      </div>
+      <div class="module-body">
+        <div class="lesson">
+          <div class="lesson-icon">⬜</div>
+          <div class="lesson-content">
+            <h4>FVG — Fair Value Gap</h4>
+            <p>A three-candle formation where the <strong>first candle's wick and third candle's wick do not overlap</strong>. The gap between them is an area of price inefficiency where orders were not met. Price frequently returns to fill these gaps.</p>
+          </div>
+        </div>
+        <div class="lesson">
+          <div class="lesson-icon">🔄</div>
+          <div class="lesson-content">
+            <h4>IFVG — Inverse Fair Value Gap</h4>
+            <p>An FVG that <strong>forms against the previous structure</strong>, signaling a shift in character. Used as a precise entry trigger after price reacts from a HTF POI. The IFVG tells you the direction has changed on that timeframe.</p>
+          </div>
+        </div>
+        <div class="lesson">
+          <div class="lesson-icon">📍</div>
+          <div class="lesson-content">
+            <h4>POI — Point of Interest</h4>
+            <p>Any zone where price is likely to react. Includes FVGs, liquidity pools, order blocks, previous highs/lows, and structure. Your TP should always land at an <strong>obvious POI</strong> — visible on the chart without zooming in.</p>
+          </div>
+        </div>
+        <div class="lesson">
+          <div class="lesson-icon">💧</div>
+          <div class="lesson-content">
+            <h4>Liquidity / Liquidity Pool</h4>
+            <p>Clusters of <strong>stop loss orders</strong> sitting above swing highs or below swing lows. Smart money seeks this liquidity to fill large positions. Identifying liquidity ahead of price tells you where price is drawn toward.</p>
+          </div>
+        </div>
+        <div class="lesson">
+          <div class="lesson-icon">🌊</div>
+          <div class="lesson-content">
+            <h4>Liquidity Sweep</h4>
+            <p>When price <strong>spikes beyond a swing high/low</strong>, hits the stop orders resting there, then immediately reverses. This is a classic manipulation move — trapping breakout traders before the real direction is revealed.</p>
+          </div>
+        </div>
+        <div class="lesson">
+          <div class="lesson-icon">⛰️</div>
+          <div class="lesson-content">
+            <h4>HTF — Higher Timeframe</h4>
+            <p>Any timeframe higher than your entry timeframe. In this strategy: <strong>1H and 4H are HTF</strong> for analysis. The HTF provides the context and bias. The LTF (1m–15m) provides the entry trigger.</p>
+          </div>
+        </div>
+        <div class="lesson">
+          <div class="lesson-icon">🔴</div>
+          <div class="lesson-content">
+            <h4>HRL / LRL — High & Low Resistance Liquidity</h4>
+            <p><strong>High Resistance Liquidity:</strong> Liquidity behind strong structure — price faces opposition reaching it. <strong>Low Resistance Liquidity:</strong> Clear path to the liquidity with no major levels in the way — price can reach it quickly and cleanly.</p>
+          </div>
+        </div>
+        <div class="lesson">
+          <div class="lesson-icon">🛡️</div>
+          <div class="lesson-content">
+            <h4>Protected High / Low</h4>
+            <p>A swing high or low that has <strong>not been swept</strong> and has a liquidity pool sitting behind it. For a reversal SL: placing your stop at a protected high/low means price would need to fully invalidate the entire structure to stop you out.</p>
+          </div>
+        </div>
+        <div class="lesson">
+          <div class="lesson-icon">📐</div>
+          <div class="lesson-content">
+            <h4>Bias</h4>
+            <p>Your <strong>directional conviction</strong> for the session — bullish or bearish — derived from HTF structure and context. All trades must align with bias. Trading against bias drastically reduces probability.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<footer>
+  <div class="container">
+    <p>RISK DISCLAIMER // Trading involves substantial risk of loss. Past performance is not indicative of future results. Never risk more than you can afford to lose.</p>
+  </div>
+</footer>
+
+<script>
+// ── NAV ──────────────────────────────
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-pill').forEach(p => p.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ── MODULES ──────────────────────────
+function toggleModule(id) {
+  const mod = document.getElementById(id);
+  mod.classList.toggle('open');
+}
+
+
+</script>
+</body>
+</html>
